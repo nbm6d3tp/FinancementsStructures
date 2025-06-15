@@ -9,13 +9,7 @@ private:
     string name;
 
 public:
-    Borrower(const string n) : name(n) {}
-    void print() const
-    {
-        cout << "Borrower: " << name << endl;
-    }
-    const string getName() const
-    {
-        return name;
-    }
+    Borrower(const string n);
+    void print(int levelIndent) const;
+    const string getName() const;
 };

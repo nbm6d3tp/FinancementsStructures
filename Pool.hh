@@ -1,8 +1,8 @@
 #pragma once
-#include <iostream>
+
 #include <string>
-#include "Lender.hh"
-using namespace std;
+
+class Lender; // Forward declaration
 
 class Pool
 {
@@ -10,13 +10,7 @@ private:
     Lender *lender;
 
 public:
-    explicit Pool(Lender *l) : lender(l) {}
-    void print() const
-    {
-        cout << "Pool for Lender: " << lender->getName() << endl;
-    }
-    const string getName() const
-    {
-        return lender->getName();
-    }
+    explicit Pool(Lender *l);
+    void print() const;
+    const std::string getName() const;
 };

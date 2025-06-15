@@ -1,27 +1,18 @@
 #pragma once
-#include <iostream>
+
 #include <string>
-#include <vector>
-using namespace std;
+#include <iostream>
+#include <iomanip>
 
 class Part
 {
 private:
-    string payDate;
+    std::string payDate;
     double amount;
 
 public:
-    Part(const string d, double a) : payDate(d), amount(a) {}
-    void print() const
-    {
-        cout << "Part paid on " << payDate << " for amount: " << amount << endl;
-    }
-    const string getPayDate() const
-    {
-        return payDate;
-    }
-    double getAmount() const
-    {
-        return amount;
-    }
+    Part(const std::string &d, double a);
+    void print(int levelIndent) const;
+    const std::string getPayDate() const;
+    double getAmount() const;
 };

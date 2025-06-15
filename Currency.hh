@@ -14,7 +14,7 @@ enum Currency
     CNY  // Chinese Yuan
 };
 
-string currencyToString(Currency cur)
+inline string currencyToString(Currency cur)
 {
     switch (cur)
     {

@@ -1,92 +1,51 @@
 #pragma once
-#include <iostream>
+
 #include <string>
 #include <vector>
-#include <iomanip>
 #include "Agent.hh"
 #include "Borrower.hh"
 #include "Facility.hh"
 #include "Pool.hh"
 #include "Currency.hh"
 #include "Status.hh"
-using namespace std;
 
 class Deal
 {
 private:
-    string contractNumber; // S/Z/B + 4 digits
+    std::string contractNumber; // S/Z/B + 4 digits
     Agent agent;
-    vector<Pool> pools;
+    std::vector<Pool> pools;
 
-    Borrower borrower;
+    Borrower *borrower;
     double projectAmount;
     Currency currency;
-    string signatureDate;
-    string endDate;
+    std::string signatureDate;
+    std::string endDate;
     Status status;
 
-    vector<Facility> facilities;
+    std::vector<Facility> facilities;
 
 public:
-    Deal(const string num, Agent ag,
-         const vector<Pool> p, Borrower b,
-         double amt, const Currency cur,
-         const string sig, const string end, const vector<Facility> fac)
-        : contractNumber(num), agent(ag), pools(p), borrower(b),
-          projectAmount(amt), currency(cur), signatureDate(sig),
-          endDate(end), facilities(fac)
-    {
-        status = Status::ACTIVE;
-    }
+    Deal(const std::string &num, Agent ag,
+         const std::vector<Pool> &p, Borrower *b,
+         double amt, Currency cur,
+         const std::string &sig, const std::string &end,
+         const std::vector<Facility> &fac);
 
-    Facility getCurrentFacility() const
-    {
-        return facilities[0];
-    }
+    // Facility *getCurrentFacility() const;
+    // double calculateTotalInterest() const;
+    // void payParts(const std::string &date, double nbParts);
+    void print(int levelIndent) const;
 
-    double calculateTotalInterest() const
-    {
-        double totalInterest = 0.0;
-
-        for (const Facility facility : facilities)
-        {
-            totalInterest += facility.calculateInterest();
-        }
-
-        return totalInterest;
-    }
-
-    void payParts(string date, double nbParts)
-    {
-        Facility currentFacility = getCurrentFacility();
-        if (currentFacility.getNbRemainingParts() >= nbParts)
-        {
-            currentFacility.payParts(date, nbParts);
-            cout << "Paid " << nbParts << " parts on " << date << endl;
-        }
-        else
-        {
-            cout << "Not enough remaining parts to pay." << endl;
-        }
-    }
-
-    void print() const
-    {
-        cout << "Deal Contract Number: " << contractNumber << endl;
-        cout << "Agent: " << agent.getName() << endl;
-        cout << "Borrower: " << borrower.getName() << endl;
-        cout << "Project Amount: " << projectAmount << " " << currencyToString(currency) << endl;
-        cout << "Signature Date: " << signatureDate << ", End Date: " << endDate << endl;
-        cout << "Status: " << (status == Status::ACTIVE ? "Active" : "Terminated") << endl;
-
-        for (const Pool &pool : pools)
-        {
-            pool.print();
-        }
-
-        for (const Facility &facility : facilities)
-        {
-            facility.print();
-        }
-    }
+    // // Getters
+    // const std::string getContractNumber() const { return contractNumber; }
+    // Agent *getAgent() const { return agent; }
+    // const std::vector<Pool *> &getPools() const { return pools; }
+    // Borrower *getBorrower() const { return borrower; }
+    // double getProjectAmount() const { return projectAmount; }
+    // Currency getCurrency() const { return currency; }
+    // const std::string getSignatureDate() const { return signatureDate; }
+    // const std::string getEndDate() const { return endDate; }
+    // Status getStatus() const { return status; }
+    // const std::vector<Facility *> &getFacilities() const { return facilities; }
 };

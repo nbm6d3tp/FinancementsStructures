@@ -1,23 +1,16 @@
 #pragma once
-#include <iostream>
 #include <string>
-#include "Lender.hh"
+#include <iostream>
 using namespace std;
 
+class Lender; // Forward declaration
 class Agent
 {
 private:
-    // Lender is a forward declaration, so we can use pointers to it
     Lender *lender;
 
 public:
-    explicit Agent(Lender *l) : lender(l) {}
-    void print() const
-    {
-        cout << "Agent for Lender: " << lender->getName() << endl;
-    }
-    const string getName() const
-    {
-        return lender->getName();
-    }
+    explicit Agent(Lender *l);
+    void print() const;
+    const string getName() const;
 };
