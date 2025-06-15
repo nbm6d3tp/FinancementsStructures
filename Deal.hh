@@ -10,6 +10,7 @@
 #include "Currency.hh"
 #include "Status.hh"
 #include "utils.hh"
+#include "Lender.hh"
 
 class Deal
 {
@@ -46,7 +47,7 @@ public:
     Status getStatus() const;
     const std::vector<Facility> &getFacilities() const;
 
-    double getProjectOriginalAmount() const;
+    double getDealOriginalAmount() const;
     double getRemainingAmount() const;
     double getTotalInterest() const;
     void payParts(const std::string &date, double nbParts);
@@ -61,7 +62,13 @@ public:
     {
         for (const Facility &facility : facilities)
         {
-            facility.printPaidParts(levelIndent);
+            std::cout << std::string(levelIndent, ' ') << "Facility from "
+                      << facility.getStartDate() << " to " << facility.getEndDate()
+                      << " (Status: " << statusToString(facility.getStatus()) << ")" << std::endl;
+            if (facility.getStatus() != Status::PENDING)
+            {
+                facility.printPaidParts(levelIndent + 2);
+            }
         }
     }
 };

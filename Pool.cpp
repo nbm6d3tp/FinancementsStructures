@@ -21,3 +21,8 @@ const std::string Pool::getName() const
 {
     return lender->getName();
 }
+
+Lender *Pool::getLender()
+{
+    return lender;
+}

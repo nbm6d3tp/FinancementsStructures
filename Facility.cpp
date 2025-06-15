@@ -174,3 +174,8 @@ void Facility::printPaidParts(int levelIndent) const
                   << " " << currencyToString(entry.second[0]->getCurrency()) << std::endl;
     }
 }
+
+void Facility::setStatus(const Status &st)
+{
+    status = st;
+}

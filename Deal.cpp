@@ -37,6 +37,12 @@ Deal::Deal(const std::string &num, Agent ag,
 
     status = Status::ACTIVE;
     facilities[0].setStatus(Status::ACTIVE); // Set the first facility as active
+
+    agent.getLender()->getPortfolio()->addDeal(this);
+    for (Pool &pool : pools)
+    {
+        pool.getLender()->getPortfolio()->addDeal(this);
+    }
 }
 
 void Deal::print(int levelIndent) const
@@ -46,7 +52,7 @@ void Deal::print(int levelIndent) const
     agent.print();
     std::cout << std::string(levelIndent, ' ') << "Borrower: " << borrower->getName() << std::endl;
     std::cout << std::string(levelIndent, ' ') << "Project Original Amount: " << std::fixed << std::setprecision(2)
-              << getProjectOriginalAmount() << " " << currencyToString(currency) << std::endl;
+              << getDealOriginalAmount() << " " << currencyToString(currency) << std::endl;
     std::cout << std::string(levelIndent, ' ') << "Signature Date: " << signatureDate
               << ", End Date: " << endDate << std::endl;
     std::cout << std::string(levelIndent, ' ') << "Status: "
@@ -137,7 +143,7 @@ const std::vector<Facility> &Deal::getFacilities() const
     return facilities;
 }
 
-double Deal::getProjectOriginalAmount() const
+double Deal::getDealOriginalAmount() const
 {
     double totalAmount = 0.0;
     for (const Facility &facility : facilities)
@@ -229,6 +235,6 @@ void Deal::payParts(const std::string &date, double nbParts)
     }
     else
     {
-        getCurrentFacility().setStatus(Status::ACTIVE);
+        facilities[facilities.size() - getNbRemainingFacilities()].setStatus(Status::ACTIVE);
     }
 }

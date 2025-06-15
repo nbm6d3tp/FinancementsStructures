@@ -19,3 +19,8 @@ const string Agent::getName() const
 {
     return lender->getName();
 }
+
+Lender *Agent::getLender()
+{
+    return lender;
+}
