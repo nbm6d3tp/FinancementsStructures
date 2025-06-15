@@ -1,18 +1,25 @@
 #pragma once
 #include <string>
+#include <stdexcept>
 using namespace std;
 
 enum Currency
 {
     EUR, // Euro
     USD, // US Dollar
-    GBP, // British Pound
     JPY, // Japanese Yen
-    CHF, // Swiss Franc
-    AUD, // Australian Dollar
-    CAD, // Canadian Dollar
-    CNY  // Chinese Yuan
 };
+
+#include <map>
+#include <utility>
+
+inline const std::map<std::pair<Currency, Currency>, double> exchangeRates = {
+    {{EUR, USD}, 1.08},
+    {{USD, EUR}, 0.925},
+    {{EUR, JPY}, 165.0},
+    {{JPY, EUR}, 0.0061},
+    {{USD, JPY}, 152.0},
+    {{JPY, USD}, 0.0066}};
 
 inline string currencyToString(Currency cur)
 {
@@ -22,18 +29,8 @@ inline string currencyToString(Currency cur)
         return "EUR";
     case USD:
         return "USD";
-    case GBP:
-        return "GBP";
     case JPY:
         return "JPY";
-    case CHF:
-        return "CHF";
-    case AUD:
-        return "AUD";
-    case CAD:
-        return "CAD";
-    case CNY:
-        return "CNY";
     default:
         return "Unknown Currency";
     }

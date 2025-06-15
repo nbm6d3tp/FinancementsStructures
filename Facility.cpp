@@ -29,19 +29,38 @@ double Facility::getNominalAmountPart() const
 
 double Facility::getRemainingAmount() const
 {
-    return originalAmount - getNbRemainingParts() * getNominalAmountPart();
+    return getNbRemainingParts() * getNominalAmountPart();
 }
 
 void Facility::print(int levelIndent) const
 {
-    std::cout << std::string(levelIndent, ' ') << "Facility from " << startDate
-              << " to " << endDate << ", Amount: " << std::fixed << std::setprecision(2)
-              << originalAmount << " " << currency
-              << ", Interest Rate: " << interestRate * 100.0 << "%, "
-              << "Parts: " << nbParts
-              << ", Remaining Amount: " << getRemainingAmount() << std::endl;
-
-    std::cout << std::string(levelIndent + 2, ' ') << "Lenders:" << std::endl;
+    std::cout << std::string(levelIndent, ' ') << "Facility Details:" << std::endl;
+    std::cout << std::string(levelIndent + 2, ' ') << "Start Date: " << startDate << std::endl;
+    std::cout << std::string(levelIndent + 2, ' ') << "End Date: " << endDate << std::endl;
+    std::cout << std::string(levelIndent + 2, ' ') << "Original Amount: "
+              << std::fixed << std::setprecision(2) << originalAmount
+              << " " << currencyToString(currency) << std::endl;
+    std::cout << std::string(levelIndent + 2, ' ') << "Interest Rate: "
+              << std::fixed << std::setprecision(2) << (interestRate * 100) << "%" << std::endl;
+    std::cout << std::string(levelIndent + 2, ' ') << "Number of Parts: " << nbParts << std::endl;
+    std::cout << std::string(levelIndent + 2, ' ') << "Number of Remaining Parts: "
+              << getNbRemainingParts() << std::endl;
+    std::cout << std::string(levelIndent + 2, ' ') << "Nominal Amount per Part: "
+              << std::fixed << std::setprecision(2) << getNominalAmountPart()
+              << " " << currencyToString(currency) << std::endl;
+    std::cout << std::string(levelIndent + 2, ' ') << "Remaining Amount: "
+              << std::fixed << std::setprecision(2) << getRemainingAmount()
+              << " " << currencyToString(currency) << std::endl;
+    std::cout << std::string(levelIndent + 2, ' ') << "Status: "
+              << statusToString(status) << std::endl;
+    std::cout << std::string(levelIndent + 2, ' ') << "Number of periods: "
+              << roughMonthsBetween(startDate, endDate)
+              << std::endl;
+    std::cout << std::string(levelIndent + 2, ' ') << "Interest Calculation: "
+              << std::fixed << std::setprecision(2) << calculateInterest()
+              << " " << currencyToString(currency) << std::endl;
+    std::cout
+        << std::string(levelIndent + 2, ' ') << "Lenders:" << std::endl;
     for (const Lender *lender : lenders)
     {
         std::cout << std::string(levelIndent + 4, ' ') << lender->getName() << std::endl;
@@ -89,4 +108,69 @@ const std::vector<Part *> Facility::getPaidParts() const
 Status Facility::getStatus() const
 {
     return status;
+}
+
+int Facility::getNbParts() const
+{
+    return nbParts;
+}
+
+void Facility::payParts(const std::string &date, double nbPartsToPay)
+{
+    if (nbPartsToPay <= 0)
+    {
+        std::cerr << "Error: Number of parts to pay must be greater than zero." << std::endl;
+        return;
+    }
+    if (!isValidDateFormat(date))
+    {
+        std::cerr << "Error: Invalid date format. Expected YYYY-MM-DD." << std::endl;
+        return;
+    }
+    if (nbPartsToPay > getNbRemainingParts())
+    {
+        std::cerr << "Error: Cannot pay more parts than remaining." << std::endl;
+        return;
+    }
+    if (status != Status::ACTIVE)
+    {
+        std::cerr << "Error: Facility is not active. Cannot pay parts." << std::endl;
+        return;
+    }
+    double amountPaid = nbPartsToPay * getNominalAmountPart();
+    for (int i = 0; i < nbPartsToPay; ++i)
+    {
+        paidParts.push_back(new Part(date, getNominalAmountPart(), currency));
+    }
+
+    if (getNbRemainingParts() == 0)
+    {
+        status = Status::TERMINATED;
+        std::cout << "Facility " << getStartDate() << " to " << getEndDate()
+                  << " has been fully paid and is now terminated." << std::endl;
+    }
+}
+void Facility::printPaidParts(int levelIndent) const
+{
+    if (paidParts.empty())
+    {
+        std::cout << std::string(levelIndent, ' ') << "No paid parts." << std::endl;
+        return;
+    }
+    std::cout << std::string(levelIndent, ' ') << "Paid Parts:" << std::endl;
+
+    std::map<std::string, std::vector<const Part *>> partsByDate;
+    for (const Part *part : paidParts)
+    {
+        partsByDate[part->getPayDate()].push_back(part);
+    }
+    for (const auto &entry : partsByDate)
+    {
+        std::cout << std::string(levelIndent + 2, ' ') << "Date: " << entry.first << std::endl;
+        int nbPartsOnDate = entry.second.size();
+        std::cout << std::string(levelIndent + 4, ' ') << "Number of Parts: " << nbPartsOnDate << std::endl;
+        std::cout << std::string(levelIndent + 4, ' ') << "Nominal Amount: "
+                  << std::fixed << std::setprecision(2) << entry.second[0]->getAmount()
+                  << " " << currencyToString(entry.second[0]->getCurrency()) << std::endl;
+    }
 }

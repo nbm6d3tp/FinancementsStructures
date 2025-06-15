@@ -1,5 +1,6 @@
 {
     "files.associations": {
+        "*.tpl": "html",
         ".tpl": "html",
         "ostream": "cpp",
         "iostream": "cpp",
@@ -51,6 +52,9 @@
         "variant": "cpp",
         "istream": "cpp",
         "iomanip": "cpp",
-        "sstream": "cpp"
+        "sstream": "cpp",
+        "bitset": "cpp",
+        "map": "cpp",
+        "regex": "cpp"
     }
 }

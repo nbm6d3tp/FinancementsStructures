@@ -44,12 +44,9 @@ public:
     const std::vector<Lender *> getLenders() const;
     const std::vector<Part *> getPaidParts() const;
     Status getStatus() const;
+    int getNbParts() const;
 
-    // Business actions
     void payParts(const std::string &date, double nbParts);
-
-    void setStatus(const Status &st)
-    {
-        status = st;
-    }
+    void setStatus(const Status &st);
+    void printPaidParts(int levelIndent) const;
 };

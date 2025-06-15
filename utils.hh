@@ -1,16 +1,16 @@
 #pragma once
 #include <string>
 #include <iomanip>
+#include <regex>
+#include <stdexcept>
+#include <map>
+#include <utility>
+#include <iostream>
+#include "Currency.hh"
+
 using namespace std;
 
-int roughMonthsBetween(string startDate, string endDate)
-{
-    // Assuming startDate and endDate are in the format "YYYY-MM-DD"
-    int startYear = stoi(startDate.substr(0, 4));
-    int startMonth = stoi(startDate.substr(5, 2));
-    int endYear = stoi(endDate.substr(0, 4));
-    int endMonth = stoi(endDate.substr(5, 2));
-
-    // Calculate the difference in months
-    return (endYear - startYear) * 12 + (endMonth - startMonth);
-}
+int roughMonthsBetween(string startDate, string endDate);
+int dateStringToInt(const string &date);
+bool isValidDateFormat(const std::string &date);
+double exchange(double amount, Currency from, Currency to);
