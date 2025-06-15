@@ -30,7 +30,7 @@ public:
          const std::vector<Pool> &p, Borrower *b,
          double amt, Currency cur,
          const std::string &sig, const std::string &end,
-         std::vector<Facility> fac);
+         const std::vector<Facility> fac);
 
     Facility &getCurrentFacility();
     // double calculateTotalInterest() const;

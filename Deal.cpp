@@ -6,13 +6,13 @@ Deal::Deal(const std::string &num, Agent ag,
            const std::vector<Pool> &p, Borrower *b,
            double amt, Currency cur,
            const std::string &sig, const std::string &end,
-           std::vector<Facility> fac)
+           const std::vector<Facility> fac)
     : contractNumber(num), agent(ag), pools(p), borrower(b),
       projectAmount(amt), currency(cur), signatureDate(sig),
       endDate(end), facilities(fac)
 {
     status = Status::ACTIVE;
-    fac[0].setStatus(Status::ACTIVE); // Set the first facility as active
+    facilities[0].setStatus(Status::ACTIVE); // Set the first facility as active
 }
 
 void Deal::print(int levelIndent) const
@@ -66,6 +66,8 @@ Facility &Deal::getCurrentFacility()
             return facility;
         }
     }
+    std::cerr << "No active facility found." << std::endl;
+    throw std::runtime_error("No active facility found");
 }
 // double Deal::calculateTotalInterest() const
 // {

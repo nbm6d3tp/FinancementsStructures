@@ -22,6 +22,7 @@ int main()
     Lender ca("Credit Agricole");
 
     Deal deal("D12345", Agent(&bnp), {Pool(&sg), Pool(&ca)}, &af, 1000000.0, Currency::EUR, "2023-01-01", "2025-01-01", {Facility("2023-01-01", "2025-01-01", 500000.0, Currency::EUR, 0.05, 10, {&bnp, &sg}), Facility("2023-06-01", "2025-06-01", 500000.0, Currency::EUR, 0.04, 10, {&ca})});
+    deal.print(0);
 }
 
 // g++ Agent.cpp Borrower.cpp Lender.cpp Pool.cpp Facility.cpp main.cpp -o main

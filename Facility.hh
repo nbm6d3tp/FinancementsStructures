@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include "Status.hh"
+#include "Currency.hh"
 
 class Lender; // Forward declaration
 class Part;   // Forward declaration
@@ -24,7 +25,7 @@ private:
 
 public:
     Facility(const std::string &s, const std::string &e,
-             double amt, const Currency &cur, double rate,
+             double amt, const Currency cur, double rate,
              int nbParts, const std::vector<Lender *> &l);
 
     double calculateInterest() const;

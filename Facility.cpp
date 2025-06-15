@@ -7,7 +7,7 @@
 #include "Currency.hh"
 
 Facility::Facility(const std::string &s, const std::string &e,
-                   double amt, const Currency &cur, double rate,
+                   double amt, const Currency cur, double rate,
                    int nbParts_, const std::vector<Lender *> &l)
     : startDate(s), endDate(e), originalAmount(amt), nbParts(nbParts_),
       currency(cur), interestRate(rate), lenders(l), status(Status::PENDING) {}
