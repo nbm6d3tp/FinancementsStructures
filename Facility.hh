@@ -15,7 +15,7 @@ private:
     std::string endDate;
     double originalAmount;
     int nbParts;
-    std::string currency;
+    Currency currency;
     double interestRate; // e.g. 0.05 = 5 % per month
 
     std::vector<Lender *> lenders;
@@ -24,7 +24,7 @@ private:
 
 public:
     Facility(const std::string &s, const std::string &e,
-             double amt, const std::string &cur, double rate,
+             double amt, const Currency &cur, double rate,
              int nbParts, const std::vector<Lender *> &l);
 
     double calculateInterest() const;
@@ -38,7 +38,7 @@ public:
     const std::string getStartDate() const;
     const std::string getEndDate() const;
     double getOriginalAmount() const;
-    const std::string getCurrency() const;
+    const Currency getCurrency() const;
     double getInterestRate() const;
     const std::vector<Lender *> getLenders() const;
     const std::vector<Part *> getPaidParts() const;

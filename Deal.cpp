@@ -6,7 +6,7 @@ Deal::Deal(const std::string &num, Agent ag,
            const std::vector<Pool> &p, Borrower *b,
            double amt, Currency cur,
            const std::string &sig, const std::string &end,
-           std::vector<Facility> &fac)
+           std::vector<Facility> fac)
     : contractNumber(num), agent(ag), pools(p), borrower(b),
       projectAmount(amt), currency(cur), signatureDate(sig),
       endDate(end), facilities(fac)
