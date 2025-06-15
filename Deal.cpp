@@ -6,12 +6,13 @@ Deal::Deal(const std::string &num, Agent ag,
            const std::vector<Pool> &p, Borrower *b,
            double amt, Currency cur,
            const std::string &sig, const std::string &end,
-           const std::vector<Facility> &fac)
+           std::vector<Facility> &fac)
     : contractNumber(num), agent(ag), pools(p), borrower(b),
       projectAmount(amt), currency(cur), signatureDate(sig),
       endDate(end), facilities(fac)
 {
     status = Status::ACTIVE;
+    fac[0].setStatus(Status::ACTIVE); // Set the first facility as active
 }
 
 void Deal::print(int levelIndent) const
@@ -46,13 +47,26 @@ void Deal::print(int levelIndent) const
     }
 }
 
-// Facility *Deal::getCurrentFacility() const
-// {
-//     if (facilities.empty())
-//         return nullptr;
-//     return facilities.back(); // Assuming the last facility is the current one
-// }
-
+Facility &Deal::getCurrentFacility()
+{
+    if (facilities.empty())
+    {
+        std::cerr << "No facilities available." << std::endl;
+        throw std::runtime_error("No facilities available");
+    }
+    if (status != Status::ACTIVE)
+    {
+        std::cerr << "Deal is not active." << std::endl;
+        throw std::runtime_error("Deal is not active");
+    }
+    for (Facility &facility : facilities)
+    {
+        if (facility.getStatus() == Status::ACTIVE)
+        {
+            return facility;
+        }
+    }
+}
 // double Deal::calculateTotalInterest() const
 // {
 //     double totalInterest = 0.0;
@@ -103,43 +117,44 @@ void Deal::print(int levelIndent) const
 //     }
 // }
 
-// const std::string Deal::getContractNumber() const
-// {
-//     return contractNumber;
-// }
-// Agent *Deal::getAgent() const
-// {
-//     return agent;
-// }
-// const std::vector<Pool *> &Deal::getPools() const
-// {
-//     return pools;
-// }
-// Borrower *Deal::getBorrower() const
-// {
-//     return borrower;
-// }
-// double Deal::getProjectAmount() const
-// {
-//     return projectAmount;
-// }
-// Currency Deal::getCurrency() const
-// {
-//     return currency;
-// }
-// const std::string Deal::getSignatureDate() const
-// {
-//     return signatureDate;
-// }
-// const std::string Deal::getEndDate() const
-// {
-//     return endDate;
-// }
-// Status Deal::getStatus() const
-// {
-//     return status;
-// }
-// const std::vector<Facility *> &Deal::getFacilities() const
-// {
-//     return facilities;
-// }
+// Getters
+const std::string Deal::getContractNumber() const
+{
+    return contractNumber;
+}
+const Agent &Deal::getAgent() const
+{
+    return agent;
+}
+const std::vector<Pool> &Deal::getPools() const
+{
+    return pools;
+}
+const Borrower *Deal::getBorrower() const
+{
+    return borrower;
+}
+double Deal::getProjectAmount() const
+{
+    return projectAmount;
+}
+Currency Deal::getCurrency() const
+{
+    return currency;
+}
+const std::string Deal::getSignatureDate() const
+{
+    return signatureDate;
+}
+const std::string Deal::getEndDate() const
+{
+    return endDate;
+}
+Status Deal::getStatus() const
+{
+    return status;
+}
+const std::vector<Facility> &Deal::getFacilities() const
+{
+    return facilities;
+}

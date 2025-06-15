@@ -46,4 +46,9 @@ public:
 
     // Business actions
     void payParts(const std::string &date, double nbParts);
+
+    void setStatus(const Status &st)
+    {
+        status = st;
+    }
 };

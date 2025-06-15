@@ -30,22 +30,22 @@ public:
          const std::vector<Pool> &p, Borrower *b,
          double amt, Currency cur,
          const std::string &sig, const std::string &end,
-         const std::vector<Facility> &fac);
+         std::vector<Facility> &fac);
 
-    // Facility *getCurrentFacility() const;
+    Facility &getCurrentFacility();
     // double calculateTotalInterest() const;
     // void payParts(const std::string &date, double nbParts);
     void print(int levelIndent) const;
 
-    // // Getters
-    // const std::string getContractNumber() const { return contractNumber; }
-    // Agent *getAgent() const { return agent; }
-    // const std::vector<Pool *> &getPools() const { return pools; }
-    // Borrower *getBorrower() const { return borrower; }
-    // double getProjectAmount() const { return projectAmount; }
-    // Currency getCurrency() const { return currency; }
-    // const std::string getSignatureDate() const { return signatureDate; }
-    // const std::string getEndDate() const { return endDate; }
-    // Status getStatus() const { return status; }
-    // const std::vector<Facility *> &getFacilities() const { return facilities; }
+    // Getters
+    const std::string getContractNumber() const;
+    const Agent &getAgent() const;
+    const std::vector<Pool> &getPools() const;
+    const Borrower *getBorrower() const;
+    double getProjectAmount() const;
+    Currency getCurrency() const;
+    const std::string getSignatureDate() const;
+    const std::string getEndDate() const;
+    Status getStatus() const;
+    const std::vector<Facility> &getFacilities() const;
 };
