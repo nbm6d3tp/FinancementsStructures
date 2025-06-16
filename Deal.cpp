@@ -17,10 +17,8 @@ Deal::Deal(const std::string &num, Agent ag,
         throw std::runtime_error("End date format is invalid. Expected YYYY-MM-DD.");
     }
 
-    double totalAmount = 0.0;
     for (const Facility &facility : facilities)
     {
-        totalAmount += facility.getOriginalAmount();
         if (dateStringToInt(facility.getStartDate()) > dateStringToInt(facility.getEndDate()))
         {
             throw std::runtime_error("Facility start date cannot be after end date");
@@ -47,36 +45,40 @@ Deal::Deal(const std::string &num, Agent ag,
 
 void Deal::print(int levelIndent) const
 {
-    std::cout << std::string(levelIndent, ' ') << "Deal Contract Number: " << contractNumber << std::endl;
-    std::cout << std::string(levelIndent, ' ') << "Agent: ";
-    agent.print();
-    std::cout << std::string(levelIndent, ' ') << "Borrower: " << borrower->getName() << std::endl;
-    std::cout << std::string(levelIndent, ' ') << "Project Original Amount: " << std::fixed << std::setprecision(2)
+    std::cout << std::string(levelIndent, ' ') << "+--------------------------+--------------------------+" << std::endl;
+    std::cout << std::string(levelIndent, ' ') << "| Field                    | Value                    |" << std::endl;
+    std::cout << std::string(levelIndent, ' ') << "+--------------------------+--------------------------+" << std::endl;
+    std::cout << std::string(levelIndent, ' ') << "| Contract Number          | " << contractNumber << std::endl;
+    std::cout << std::string(levelIndent, ' ') << "| Agent                    | " << agent.getName() << std::endl;
+    std::cout << std::string(levelIndent, ' ') << "| Borrower                 | " << borrower->getName() << std::endl;
+    std::cout << std::string(levelIndent, ' ') << "| Original Amount          | " << std::fixed << std::setprecision(2)
               << getDealOriginalAmount() << " " << currencyToString(currency) << std::endl;
-    std::cout << std::string(levelIndent, ' ') << "Signature Date: " << signatureDate
-              << ", End Date: " << endDate << std::endl;
-    std::cout << std::string(levelIndent, ' ') << "Status: "
-              << statusToString(status) << std::endl;
-    std::cout << std::string(levelIndent, ' ') << "Remaining Amount: "
-              << std::fixed << std::setprecision(2) << getRemainingAmount() << " " << currencyToString(currency) << std::endl;
-    std::cout << std::string(levelIndent, ' ') << "Total Interest: "
-              << std::fixed << std::setprecision(2) << getTotalInterest() << " " << currencyToString(currency) << std::endl;
+    std::cout << std::string(levelIndent, ' ') << "| Signature Date           | " << signatureDate << std::endl;
+    std::cout << std::string(levelIndent, ' ') << "| End Date                 | " << endDate << std::endl;
+    std::cout << std::string(levelIndent, ' ') << "| Status                   | " << statusToString(status) << std::endl;
+    std::cout << std::string(levelIndent, ' ') << "| Remaining Amount         | " << std::fixed << std::setprecision(2)
+              << getRemainingAmount() << " " << currencyToString(currency) << std::endl;
+    std::cout << std::string(levelIndent, ' ') << "| Total Interest           | " << std::fixed << std::setprecision(2)
+              << getTotalInterest() << " " << currencyToString(currency) << std::endl;
+    std::cout << std::string(levelIndent, ' ') << "+--------------------------+--------------------------+" << std::endl;
 
     if (!pools.empty())
     {
         std::cout << "Pools involved:" << std::endl;
         for (const Pool &pool : pools)
         {
-            std::cout << std::string(levelIndent + 2, ' ') << "Pool Name: " << pool.getName() << std::endl;
+            std::cout << std::string(levelIndent + 2, ' ') << pool.getName() << std::endl;
         }
     }
 
     if (!facilities.empty())
     {
         std::cout << "Facilities involved:" << std::endl;
-        for (const Facility &facility : facilities)
+
+        for (int i = 0; i < facilities.size(); ++i)
         {
-            facility.print(levelIndent + 2);
+            std::cout << std::string(levelIndent + 2, ' ') << "\n+-------------------------- Facility " << i + 1 << " Summary --------------------------+\n";
+            facilities[i].print(levelIndent + 2);
         }
     }
 }

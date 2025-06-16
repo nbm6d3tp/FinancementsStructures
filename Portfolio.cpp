@@ -83,11 +83,25 @@ double Portfolio::calculateTotalRemainingValue() const
     return totalValue;
 }
 
-void Portfolio::print() const
+void Portfolio::print(int levelIndent) const
 {
-    std::cout << "Portfolio contains " << deals.size() << " deals." << std::endl;
-    for (Deal *deal : deals)
+    std::cout << std::string(levelIndent, ' ') << "Portfolio of Lender: " << (lender ? lender->getName() : "Unknown") << std::endl;
+    std::cout << std::string(levelIndent + 2, ' ') << "Currency: " << currencyToString(currency) << std::endl;
+    std::cout << std::string(levelIndent + 2, ' ') << "Number of Deals: " << deals.size() << std::endl;
+
+    int activeDeals = 0;
+    for (const Deal *deal : deals)
     {
-        deal->print(2);
+        if (deal->getStatus() != Status::TERMINATED)
+        {
+            ++activeDeals;
+        }
     }
+    std::cout << std::string(levelIndent + 2, ' ') << "Number of Active Deals: " << activeDeals << std::endl;
+    std::cout << std::string(levelIndent + 2, ' ') << "Total Interest: "
+              << std::fixed << std::setprecision(2) << calculateTotalInterest() << " " << currencyToString(currency) << std::endl;
+    std::cout << std::string(levelIndent + 2, ' ') << "Total Original Value: "
+              << std::fixed << std::setprecision(2) << calculateTotalOriginalValue() << " " << currencyToString(currency) << std::endl;
+    std::cout << std::string(levelIndent + 2, ' ') << "Total Remaining Value: "
+              << std::fixed << std::setprecision(2) << calculateTotalRemainingValue() << " " << currencyToString(currency) << std::endl;
 }

@@ -5,12 +5,23 @@
 #include "Part.hh"
 #include "utils.hh"
 #include "Currency.hh"
-
+#include <sstream>
 Facility::Facility(const std::string &s, const std::string &e,
                    double amt, const Currency cur, double rate,
                    int nbParts_, const std::vector<Lender *> &l)
     : startDate(s), endDate(e), originalAmount(amt), nbParts(nbParts_),
-      currency(cur), interestRate(rate), lenders(l), status(Status::PENDING) {}
+      currency(cur), interestRate(rate), lenders(l), status(Status::PENDING)
+{
+    // todo
+}
+
+// Utility function for string conversion with precision
+std::string to_string_with_precision(double value, int n = 2)
+{
+    std::ostringstream out;
+    out << std::fixed << std::setprecision(n) << value;
+    return out.str();
+}
 
 double Facility::calculateInterest() const
 {
@@ -34,45 +45,88 @@ double Facility::getRemainingAmount() const
 
 void Facility::print(int levelIndent) const
 {
-    std::cout << std::string(levelIndent, ' ') << "Facility Details:" << std::endl;
-    std::cout << std::string(levelIndent + 2, ' ') << "Start Date: " << startDate << std::endl;
-    std::cout << std::string(levelIndent + 2, ' ') << "End Date: " << endDate << std::endl;
-    std::cout << std::string(levelIndent + 2, ' ') << "Original Amount: "
-              << std::fixed << std::setprecision(2) << originalAmount
-              << " " << currencyToString(currency) << std::endl;
-    std::cout << std::string(levelIndent + 2, ' ') << "Interest Rate: "
-              << std::fixed << std::setprecision(2) << (interestRate * 100) << "%" << std::endl;
-    std::cout << std::string(levelIndent + 2, ' ') << "Number of Parts: " << nbParts << std::endl;
-    std::cout << std::string(levelIndent + 2, ' ') << "Number of Remaining Parts: "
-              << getNbRemainingParts() << std::endl;
-    std::cout << std::string(levelIndent + 2, ' ') << "Nominal Amount per Part: "
-              << std::fixed << std::setprecision(2) << getNominalAmountPart()
-              << " " << currencyToString(currency) << std::endl;
-    std::cout << std::string(levelIndent + 2, ' ') << "Remaining Amount: "
-              << std::fixed << std::setprecision(2) << getRemainingAmount()
-              << " " << currencyToString(currency) << std::endl;
-    std::cout << std::string(levelIndent + 2, ' ') << "Status: "
-              << statusToString(status) << std::endl;
-    std::cout << std::string(levelIndent + 2, ' ') << "Number of periods: "
-              << roughMonthsBetween(startDate, endDate)
-              << std::endl;
-    std::cout << std::string(levelIndent + 2, ' ') << "Interest Calculation: "
-              << std::fixed << std::setprecision(2) << calculateInterest()
-              << " " << currencyToString(currency) << std::endl;
-    std::cout
-        << std::string(levelIndent + 2, ' ') << "Lenders:" << std::endl;
+    std::cout << std::string(levelIndent, ' ')
+              << "| " << std::left << std::setw(20) << "Field"
+              << "| " << std::left << std::setw(30) << "Value"
+              << "|\n";
+    std::cout << std::string(levelIndent, ' ') << "+----------------------+--------------------------------+\n";
+
+    std::cout << std::string(levelIndent, ' ')
+              << "| " << std::setw(20) << "Start Date"
+              << "| " << std::setw(30) << startDate << "|\n";
+    std::cout << std::string(levelIndent, ' ')
+              << "| " << std::setw(20) << "End Date"
+              << "| " << std::setw(30) << endDate << "|\n";
+    std::cout << std::string(levelIndent, ' ')
+              << "| " << std::setw(20) << "Original Amount"
+              << "| " << std::setw(27) << (std::to_string(originalAmount) + " " + currencyToString(currency)) << "|\n";
+    std::cout << std::string(levelIndent, ' ')
+              << "| " << std::setw(20) << "Interest Rate"
+              << "| " << std::setw(27) << (std::to_string(interestRate * 100) + "%") << "|\n";
+    std::cout << std::string(levelIndent, ' ')
+              << "| " << std::setw(20) << "Nb Parts"
+              << "| " << std::setw(30) << nbParts << "|\n";
+    std::cout << std::string(levelIndent, ' ')
+              << "| " << std::setw(20) << "Remaining Parts"
+              << "| " << std::setw(30) << getNbRemainingParts() << "|\n";
+    std::cout << std::string(levelIndent, ' ')
+              << "| " << std::setw(20) << "Nominal/Part"
+              << "| " << std::setw(27) << (to_string_with_precision(getNominalAmountPart(), 2) + " " + currencyToString(currency)) << "|\n";
+    std::cout << std::string(levelIndent, ' ')
+              << "| " << std::setw(20) << "Remaining Amount"
+              << "| " << std::setw(27) << (to_string_with_precision(getRemainingAmount(), 2) + " " + currencyToString(currency)) << "|\n";
+    std::cout << std::string(levelIndent, ' ')
+              << "| " << std::setw(20) << "Status"
+              << "| " << std::setw(30) << statusToString(status) << "|\n";
+    std::cout << std::string(levelIndent, ' ')
+              << "| " << std::setw(20) << "Nb Periods"
+              << "| " << std::setw(30) << roughMonthsBetween(startDate, endDate) << "|\n";
+    std::cout << std::string(levelIndent, ' ')
+              << "| " << std::setw(20) << "Interest"
+              << "| " << std::setw(27) << (to_string_with_precision(calculateInterest(), 2) + " " + currencyToString(currency)) << "|\n";
+    std::cout << std::string(levelIndent, ' ') << "+----------------------+--------------------------------+\n";
+
+    // Print lenders in table
+    std::cout << std::string(levelIndent, ' ') << "\n+-------------------------- Lenders --------------------------+\n";
+    std::cout << std::string(levelIndent, ' ')
+              << "| " << std::left << std::setw(3) << "#"
+              << "| " << std::left << std::setw(30) << "Lender Name"
+              << "|\n";
+    std::cout << std::string(levelIndent, ' ') << "+---+------------------------------+\n";
+    int idx = 1;
     for (const Lender *lender : lenders)
     {
-        std::cout << std::string(levelIndent + 4, ' ') << lender->getName() << std::endl;
+        std::cout << std::string(levelIndent, ' ')
+                  << "| " << std::setw(3) << idx++
+                  << "| " << std::setw(30) << lender->getName()
+                  << "|\n";
     }
+    std::cout << std::string(levelIndent, ' ') << "+---+------------------------------+\n";
 
+    // Print paid parts summary table
     if (!paidParts.empty())
     {
-        std::cout << std::string(levelIndent + 2, ' ') << "Paid Parts:" << std::endl;
+        std::cout << std::string(levelIndent, ' ') << "\n+-------------------------- Paid Parts --------------------------+\n";
+        std::cout << std::string(levelIndent, ' ')
+                  << "| " << std::left << std::setw(12) << "Pay Date"
+                  << "| " << std::left << std::setw(10) << "Nb Parts"
+                  << "| " << std::left << std::setw(15) << "Nominal/Part"
+                  << "|\n";
+        std::cout << std::string(levelIndent, ' ') << "+------------+----------+---------------+\n";
+        std::map<std::string, int> partsByDate;
         for (const Part *part : paidParts)
         {
-            part->print(levelIndent + 4);
+            partsByDate[part->getPayDate()]++;
         }
+        for (const auto &entry : partsByDate)
+        {
+            std::cout << std::string(levelIndent, ' ')
+                      << "| " << std::setw(12) << entry.first
+                      << "| " << std::setw(10) << entry.second
+                      << "| " << std::setw(15) << (to_string_with_precision(getNominalAmountPart(), 2) + " " + currencyToString(currency))
+                      << "|\n";
+        }
+        std::cout << std::string(levelIndent, ' ') << "+------------+----------+---------------+\n";
     }
 }
 

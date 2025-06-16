@@ -21,5 +21,5 @@ public:
     double calculateTotalInterest() const;
     double calculateTotalOriginalValue() const;
     double calculateTotalRemainingValue() const;
-    void print() const;
+    void print(int levelIndent) const;
 };
