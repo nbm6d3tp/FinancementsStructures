@@ -37,7 +37,7 @@ int main()
         std::cout << "Menu:" << std::endl;
         std::cout << "1. Get Informations" << std::endl;
         std::cout << "2. Pay Debts" << std::endl;
-        std::cout << "3. Create Deal" << std::endl;
+        std::cout << "3. Create Deal (not implemented yet)" << std::endl;
         std::cout << "Choose an option: ";
         int choice;
         try
