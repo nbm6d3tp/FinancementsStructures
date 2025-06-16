@@ -169,7 +169,7 @@ int Facility::getNbParts() const
     return nbParts;
 }
 
-void Facility::payParts(const std::string &date, double nbPartsToPay)
+void Facility::payParts(const std::string &date, int nbPartsToPay)
 {
     if (nbPartsToPay <= 0)
     {

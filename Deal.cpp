@@ -240,3 +240,22 @@ void Deal::payParts(const std::string &date, double nbParts)
         facilities[facilities.size() - getNbRemainingFacilities()].setStatus(Status::ACTIVE);
     }
 }
+
+void Deal::setStatus(const Status &st)
+{
+    status = st;
+}
+
+void Deal::printPaidParts(int levelIndent) const
+{
+    for (const Facility &facility : facilities)
+    {
+        std::cout << std::string(levelIndent, ' ') << "Facility from "
+                  << facility.getStartDate() << " to " << facility.getEndDate()
+                  << " (Status: " << statusToString(facility.getStatus()) << ")" << std::endl;
+        if (facility.getStatus() != Status::PENDING)
+        {
+            facility.printPaidParts(levelIndent + 2);
+        }
+    }
+}

@@ -46,7 +46,7 @@ public:
     Status getStatus() const;
     int getNbParts() const;
 
-    void payParts(const std::string &date, double nbParts);
+    void payParts(const std::string &date, int nbParts);
     void setStatus(const Status &st);
     void printPaidParts(int levelIndent) const;
 };

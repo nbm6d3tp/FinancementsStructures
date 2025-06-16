@@ -52,23 +52,6 @@ public:
     double getTotalInterest() const;
     void payParts(const std::string &date, double nbParts);
     int getNbRemainingFacilities() const;
-
-    void setStatus(const Status &st)
-    {
-        status = st;
-    }
-
-    void printPaidParts(int levelIndent) const
-    {
-        for (const Facility &facility : facilities)
-        {
-            std::cout << std::string(levelIndent, ' ') << "Facility from "
-                      << facility.getStartDate() << " to " << facility.getEndDate()
-                      << " (Status: " << statusToString(facility.getStatus()) << ")" << std::endl;
-            if (facility.getStatus() != Status::PENDING)
-            {
-                facility.printPaidParts(levelIndent + 2);
-            }
-        }
-    }
+    void setStatus(const Status &st);
+    void printPaidParts(int levelIndent) const;
 };
